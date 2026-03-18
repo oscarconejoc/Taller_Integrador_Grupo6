@@ -1,3 +1,6 @@
+## Máquina de estados del firmware
+
+```mermaid
 stateDiagram-v2
     Inicio --> ESPERA_GPS
     ESPERA_GPS --> LEER_DATA
