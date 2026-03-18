@@ -15,6 +15,7 @@ stateDiagram-v2
 
 ## Diagrama de bloques del firmware
 
+```mermaid
 flowchart LR
     A[Main / Loop] --> B[Gestor de Estados]
 
@@ -29,3 +30,4 @@ flowchart LR
     G --> B
     F --> H
     D --> H
+```
