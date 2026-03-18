@@ -10,18 +10,3 @@ stateDiagram-v2
     SLEEP --> ESPERA_GPS
     TX_DATA --> ERROR
     ERROR --> Inicio
-
-flowchart LR
-    A[Main / Loop] --> B[Gestor de Estados]
-
-    B --> C[Lectura GPS]
-    C --> D[Procesamiento de Datos]
-    D --> E[Empaquetado]
-    E --> F[Transmisión LoRa / APRS]
-
-    B --> G[Gestión de Energía]
-    B --> H[Debug / Logging]
-
-    G --> B
-    F --> H
-    D --> H
