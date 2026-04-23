@@ -222,14 +222,6 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 ---
 
-## 👨‍💻 Autores
-
-- Oscar David Conejo Cantón  
-- Luis Diego Sandí Quesada  
-
-Instituto Tecnológico de Costa Rica (TEC)
-
----
 
 ## 📡 Tecnologías Utilizadas
 
