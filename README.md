@@ -164,9 +164,12 @@ El sistema sigue un flujo basado en máquina de estados:
 
 Formato de transmisión:
 Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
-
-
 ---
+
+## Comprobación de funcionamiento inicial
+<p align="center">
+<img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/comp.png" alt="APRS.fi" width="500">
+</p>
 
 ## 📅 Cronograma
 
