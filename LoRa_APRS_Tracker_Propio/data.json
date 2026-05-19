@@ -1,0 +1,9 @@
+{
+  "callsign": "TI0TEC6",
+  "ssid": 7,
+  "freq": 433.775,
+  "symbol": "[",
+  "overlay": "/",
+  "comment": "Enviado desde mi T-Beam",
+  "interval_ms": 60000
+}
