@@ -186,7 +186,7 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 ---
 
-## 💰 Presupuesto
+## 💰 Presupuesto (Se debe considerar añadir el pago de los ingenieros con respecto al tiempo empleado)
 
 | Componente | Costo (USD) |
 |----------|------------|
