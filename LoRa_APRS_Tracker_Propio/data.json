@@ -1,5 +1,6 @@
 {
 	"debug": false,
+	//Perfil Unico Indicativo TI0TEC6-7
 	"beacons": [
 		{
 			"callsign": "TI0TEC6-7",
@@ -8,6 +9,7 @@
 			"timeout": 1,
 			"symbol": "[",
 			"overlay": "/",
+			//Algoritmo de tx SMARTBEACONING
 			"smart_beacon": {
 				"active": true,
 				"turn_min": 25,
@@ -22,9 +24,11 @@
 		}
 	],
 	"button": {
+		//Fuerza a tx
 		"tx": true,
-		"alt_message": true
+		"alt_message": false
 	},
+	//Parametros RF
 	"lora": {
 		"frequency_rx": 433775000,
 		"frequency_tx": 433775000,
@@ -33,6 +37,7 @@
 		"signal_bandwidth": 125000,
 		"coding_rate4": 5
 	},
+	//Push to talk 
 	"ptt_output": {
 		"active": false,
 		"io_pin": 4,
