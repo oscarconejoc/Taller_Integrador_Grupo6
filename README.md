@@ -188,6 +188,9 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 ## 💰 Presupuesto (Se debe considerar añadir el pago de los ingenieros con respecto al tiempo empleado)
 
+
+
+### 3. Costos de los Materiales
 | Componente | Costo (USD) |
 |----------|------------|
 | LILYGO LoRa ESP32 | 20 |
@@ -198,7 +201,17 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 | Otros | 5 |
 | **Total** | **49 USD** |
 
+49 dolares que pasan a 22548.82 colones con el tipo de cambio actual a 460.18
+
+### 2. Honorarios Profesionales
+Con base en la tarifa mínima por hora profesional establecida por el Colegio Federado de Ingenieros y de Arquitectos.
 ---
+| Descripción | Tiempo Invertido | Tarifa por Hora | Subtotal (Colones) |
+| :--- | :---: | :---: | :--- |
+| Desarrollo de firmware, integración de sensores y pruebas de transmisión | 40 horas | ¢37,700 | ¢1,508,000 |
+| **Total de Honorarios** | | | **¢1,508,000** |
+---
+Para un total de ¢1,530,548.82
 
 ## 🎯 Objetivos
 
