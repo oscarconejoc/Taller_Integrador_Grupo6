@@ -190,7 +190,7 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 
 
-### 3. Costos de los Materiales
+### 1. Costos de los Materiales
 | Componente | Costo (USD) |
 |----------|------------|
 | LILYGO LoRa ESP32 | 20 |
