@@ -33,7 +33,7 @@ El sistema opera bajo los lineamientos del **Plan Nacional de Atribución de Fre
 * **Potencia:** PIRE máxima de 30 dBm (1 W) en la banda de 902-940 MHz.
 * **Normativa:** Regulado por el MICITT y supervisado técnicamente por la SUTEL.
 
-## Arquitectura del Firmware
+## Arquitectura del Firmware.
 ## Máquina de estados del firmware
 
 ```mermaid
