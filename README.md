@@ -49,7 +49,7 @@ stateDiagram-v2
 ```
 
 
-## Diagrama de bloques del firmware
+## Diagrama de bloques del firmware.
 
 ```mermaid
 flowchart LR
