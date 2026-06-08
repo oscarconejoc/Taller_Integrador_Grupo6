@@ -88,7 +88,7 @@ La solución está orientada a entornos donde no existe conectividad tradicional
 
 ---
 
-## 🧩 Arquitectura del Sistema
+## 🧩 Arquitectura del Sistema.
 
 El sistema se divide en cuatro capas principales:
 
