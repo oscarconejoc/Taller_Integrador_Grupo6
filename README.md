@@ -11,7 +11,7 @@ Este proyecto consiste en la investigación, diseño e implementación de un sis
     * Luis Diego Sandí Quesada
 * **Institución:** Tecnológico de Costa Rica 
 
-## Objetivo General
+## Objetivo General.
 Desarrollar e implementar el firmware para los módulos tracker del sistema de comunicaciones LoRa/APRS, permitiendo la adquisición de información de posicionamiento y su transmisión mediante protocolos de comunicación inalámbrica de baja potencia y largo alcance, garantizando un funcionamiento eficiente y confiable.
 
 ## Objetivos Específicos
