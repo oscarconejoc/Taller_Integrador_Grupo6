@@ -75,7 +75,7 @@ Este proyecto presenta el diseño y desarrollo inicial de un sistema de monitore
 
 ---
 
-## 📌 Descripción del Proyecto
+## 📌 Descripción del Proyecto.
 
 El sistema propuesto utiliza un módulo tipo *tracker* capaz de:
 
