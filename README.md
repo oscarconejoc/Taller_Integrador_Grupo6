@@ -34,7 +34,7 @@ El sistema opera bajo los lineamientos del **Plan Nacional de Atribución de Fre
 * **Normativa:** Regulado por el MICITT y supervisado técnicamente por la SUTEL.
 
 ## Arquitectura del Firmware.
-## Máquina de estados del firmware
+## Máquina de estados del firmware.
 
 ```mermaid
 stateDiagram-v2
