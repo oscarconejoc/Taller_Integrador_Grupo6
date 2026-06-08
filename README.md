@@ -19,7 +19,7 @@ Desarrollar e implementar el firmware para los módulos tracker del sistema de c
 * Desarrollar el sistema de transmisión de datos para el envío de información de posición y telemetría mediante tecnologías LoRa o APRS.
 * Realizar pruebas y validación del firmware, verificando la correcta adquisición de datos y la confiabilidad de la comunicación.
 
-## Fundamentos Técnicos
+## Fundamentos Técnicos.
 
 ### APRS (Automatic Packet Reporting System)
 Sistema de comunicaciones digitales por radio que permite la transmisión de información en tiempo real (posición GPS, mensajes, telemetría). Utiliza principalmente bandas VHF/UHF y se basa en el protocolo AX.25.
