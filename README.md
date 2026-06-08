@@ -2,7 +2,7 @@
 
 Este proyecto consiste en la investigación, diseño e implementación de un sistema de comunicaciones basado en las tecnologías **APRS** (Automatic Packet Reporting System) y **LoRa** (Long Range) para la adquisición y transmisión de datos de posicionamiento y telemetría.
 
-## Información del Proyecto
+## Información del Proyecto.
 * **Curso:** Taller Integrador
 * **callsign:** Ti0Tec6-7
 * **Grupo:** #6
