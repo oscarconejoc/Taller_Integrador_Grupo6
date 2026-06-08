@@ -120,7 +120,7 @@ El sistema se divide en cuatro capas principales:
 
 ---
 
-## 🔌 Protocolos de Comunicación
+## 🔌 Protocolos de Comunicación.
 
 - **SPI**
   - Utilizado para el acelerómetro (ADXL345)
