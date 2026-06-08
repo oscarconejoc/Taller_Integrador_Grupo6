@@ -183,7 +183,7 @@ void load_config() {
 
   if (!file) {
     logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "Config", "No existe tracker.json ni data.json");
-    show_display("CONFIG ERR", "No tracker/data JSON", "Carga con uploadfs", "", 2000);
+    show_display("ERROR", ".JSON", "Cargar valido", "", 2000);
   } else {
     DynamicJsonDocument data(4096);
     auto err = deserializeJson(data, file);
@@ -195,17 +195,17 @@ void load_config() {
         errMsg = "Empty file";
       }
       logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "Config", "Error al parsear JSON (%s): %s", openedPath ? openedPath : "unknown", errMsg.c_str());
-      show_display("CONFIG ERR", "JSON invalido", errMsg, "", 3000);
+      show_display("ERROR", ".JSON invalido", errMsg, "", 3000);
     } else {
       if (openedPath) {
-        show_display("CONFIG OK", openedPath, "", "", 1000);
+        show_display("JSON OK", openedPath, "", "", 1000);
       }
       Config.debug = data["debug"] | false;
       Config.debug = data["debug"] | false;
       JsonArray beacons = data["beacons"].as<JsonArray>();
       if (beacons.isNull()) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "Config", "No existe campo 'beacons' en JSON.");
-        show_display("CONFIG WARN", "No beacons", "Usando valores por defecto", "", 2000);
+        show_display("WARNING", "No beacons", "...", "", 2000);
       } else {
         for (JsonVariant v : beacons) {
           BeaconConfig bc;
@@ -329,7 +329,7 @@ void setup_lora() {
   
   if (!LoRa.begin(Config.lora.frequencyTx)) {
     logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "LoRa", "¡Fallo al inicializar LoRa!");
-    show_display("ERROR", "Fallo LoRa", "Reintentando...", "", 3000);
+    show_display("ERR LORA", "...", "Reintentando...", "", 3000);
     lora_initialized = false;
     return;
   }
@@ -392,7 +392,7 @@ void setup() {
   
   // Display
   setup_display();
-  show_display("TEC APRS", "Rastreador Unificado", "Version: " VERSION, "", 2000);
+  show_display("APRS", "Control vial", "Version: " VERSION, "", 2000);
   
   // Cargar configuración
   logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "Main", "Cargando configuración...");
@@ -460,12 +460,12 @@ void loop() {
         calTiempoTotal = millis(); 
         calTimerEspera = millis(); 
         calLecturas = 0;
-        show_display("CAL GPS", "Validando...", "Lecturas: 0/4", "");
+        show_display("GPS", "Reading...", "Lecturas: 0/4", "");
       }
       
       // Timeout: si no tienes fix en 15 minutos, salta a SLEEP
       if (millis() - calTiempoTotal > 900000) {
-        logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "GPS", "Calibración GPS timeout, saltando...");
+        logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "GPS", "Timeout...");
         estadoActual = SLEEP; 
         calIniciado = false; 
         return;
@@ -474,7 +474,7 @@ void loop() {
       if (calEsperandoFix) {
         if (gps.location.isValid() && gps.location.isUpdated()) {
           calLecturas++;
-          show_display("CAL OK", String("Lectura ") + String(calLecturas) + "/4", String(gps.location.lat(),4), "", 2000);
+          show_display("GPS", String("Lectura ") + String(calLecturas) + "/4", String(gps.location.lat(),4), "", 2000);
           if (calLecturas >= 4) {
             logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "GPS", "Calibración completada");
             estadoActual = SLEEP; 
@@ -503,7 +503,7 @@ void loop() {
       pmu.enableALDO3(); // Encender GPS (Corregido)
       if (gpsOnStart == 0) {
         gpsOnStart = millis();
-        show_display("GPS ON", "Buscando fix...", "", "", 1000);
+        show_display("GPS", "Fix...", "", "", 1000);
       }
       if (gps.location.isValid() && gps.location.isUpdated()) {
         gpsOnStart = 0;
@@ -547,7 +547,7 @@ void loop() {
       // Verificar que LoRa esté inicializado
       if (!lora_initialized) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "TX", "LoRa no inicializado, reintentando...");
-        show_display("LORA INIT", "Reintentando...", "", "", 1000);
+        show_display("LORA", "Redo...", "", "", 1000);
         setup_lora();
         if (!lora_initialized) {
           estadoFallo = TX_DATA; 
@@ -577,7 +577,7 @@ void loop() {
       
       if (LoRa.endPacket()) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "¡Transmisión exitosa!");
-        show_display("TX OK", "Enviado con exito", "", "", 2000);
+        show_display("TX", "Exitoso", "", "", 2000);
         estadoActual = SLEEP;
       } else {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "TX", "Fallo en transmisión");
