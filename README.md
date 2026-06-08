@@ -69,7 +69,7 @@ flowchart LR
 ```
 
 
-# 🚧 Sistema de Monitoreo Estructural de Puentes con LoRa
+# 🚧 Sistema de Monitoreo Estructural de Puentes con LoRa.
 
 Este proyecto presenta el diseño y desarrollo inicial de un sistema de monitoreo estructural de puentes basado en tecnología LoRa, enfocado en aplicaciones de bajo consumo energético y operación en zonas remotas.
 
