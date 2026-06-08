@@ -171,6 +171,11 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 <img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/comp.png" alt="APRS.fi" width="500">
 </p>
 
+## Comprobación de Transmisión a Gate del grupo
+<p align="center">
+<img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/Transmision.jpeg" alt="APRS.fi" width="500">
+</p>
+
 ## 📅 Cronograma
 
 | Semana | Actividad |
