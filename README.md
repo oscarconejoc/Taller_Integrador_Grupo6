@@ -136,7 +136,7 @@ El sistema se divide en cuatro capas principales:
 
 ---
 
-## 📡 Configuración LoRa
+## 📡 Configuración LoRa.
 
 - Frecuencia: **433 MHz**
 - Spreading Factor: **SF10**
@@ -145,7 +145,7 @@ El sistema se divide en cuatro capas principales:
 
 ---
 
-## ⚙️ Lógica del Firmware
+## ⚙️ Lógica del Firmware.
 
 El sistema sigue un flujo basado en máquina de estados:
 
@@ -160,23 +160,23 @@ El sistema sigue un flujo basado en máquina de estados:
 
 ---
 
-## 📦 Trama de Datos
+## 📦 Trama de Datos.
 
 Formato de transmisión:
 Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 ---
 
-## Comprobación de funcionamiento inicial
+## Comprobación de funcionamiento inicial.
 <p align="center">
 <img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/comp.png" alt="APRS.fi" width="500">
 </p>
 
-## Comprobación de Transmisión a Gate del grupo
+## Comprobación de Transmisión a Gate del grupo.
 <p align="center">
 <img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/Transmision.jpeg" alt="APRS.fi" width="500">
 </p>
 
-## 📅 Cronograma
+## 📅 Cronograma.
 
 | Semana | Actividad |
 |------|----------|
@@ -191,11 +191,11 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 ---
 
-## 💰 Presupuesto (Se debe considerar añadir el pago de los ingenieros con respecto al tiempo empleado)
+## 💰 Presupuesto (Se debe considerar añadir el pago de los ingenieros con respecto al tiempo empleado).
 
 
 
-### 1. Costos de los Materiales
+### 1. Costos de los Materiales.
 | Componente | Costo (USD) |
 |----------|------------|
 | LILYGO LoRa ESP32 | 20 |
@@ -208,7 +208,7 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 
 49 dolares que pasan a 22548.82 colones con el tipo de cambio actual a 460.18
 
-### 2. Honorarios Profesionales
+### 2. Honorarios Profesionales.
 Con base en la tarifa mínima por hora profesional establecida por el Colegio Federado de Ingenieros y de Arquitectos.
 ---
 | Descripción | Tiempo Invertido | Tarifa por Hora | Subtotal (Colones) |
@@ -218,7 +218,7 @@ Con base en la tarifa mínima por hora profesional establecida por el Colegio Fe
 ---
 Para un total de ¢1,530,548.82
 
-## 🎯 Objetivos
+## 🎯 Objetivos.
 
 - Diseñar un sistema autónomo de bajo consumo
 - Medir variables estructurales relevantes
@@ -226,7 +226,7 @@ Para un total de ¢1,530,548.82
 
 ---
 
-## 📊 Aplicaciones
+## 📊 Aplicaciones.
 
 - Monitoreo de puentes
 - Infraestructura vial
@@ -235,7 +235,7 @@ Para un total de ¢1,530,548.82
 
 ---
 
-## ✅ Conclusiones
+## ✅ Conclusiones.
 
 - El sistema es viable para monitoreo en zonas remotas
 - Permite operación prolongada con bajo consumo energético
@@ -244,7 +244,7 @@ Para un total de ¢1,530,548.82
 ---
 
 
-## 📡 Tecnologías Utilizadas
+## 📡 Tecnologías Utilizadas.
 
 - ESP32
 - LoRa (SX1278)
@@ -254,7 +254,7 @@ Para un total de ¢1,530,548.82
 ---
 
 --- 
-## Configuración LoRa 
+## Configuración LoRa.
 | Parámetro | Valor | 
 |------------|--------| 
 | Frecuencia | 433.775 MHz | 
@@ -264,7 +264,7 @@ Para un total de ¢1,530,548.82
 | Coding Rate | 4/5 | 
 ---
 
-## Funcionamiento General 
+## Funcionamiento General.
 1. Inicialización de periféricos.
 2. Adquisición de datos GPS y sensores.
 3. Construcción de tramas APRS.
@@ -276,7 +276,7 @@ Para un total de ¢1,530,548.82
 
 ---
 
-## Resultados Obtenidos
+## Resultados Obtenidos.
 Las pruebas realizadas permitieron validar:
 - Adquisición correcta de coordenadas GPS.
 - Construcción válida de paquetes APRS.
@@ -287,7 +287,7 @@ Las pruebas realizadas permitieron validar:
 
 ---
 
-## Aplicaciones Potenciales
+## Aplicaciones Potenciales.
 - Monitoreo estructural de puentes.
 - Infraestructura vial.
 - Sistemas IoT en zonas remotas.
