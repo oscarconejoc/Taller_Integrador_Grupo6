@@ -108,7 +108,7 @@ El sistema se divide en cuatro capas principales:
 
 ---
 
-## 🔧 Hardware Utilizado
+## 🔧 Hardware Utilizado.
 
 | Componente | Descripción |
 |----------|------------|
