@@ -254,7 +254,8 @@ Para un total de ¢1,530,548.82
 ---
 
 --- 
-## Configuración LoRa | Parámetro | Valor | 
+## Configuración LoRa 
+| Parámetro | Valor | 
 |------------|--------| 
 | Frecuencia | 433.775 MHz | 
 | Potencia TX | 20 dBm | 
