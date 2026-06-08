@@ -252,3 +252,47 @@ Para un total de ¢1,530,548.82
 - Sistemas Embebidos
 
 ---
+
+--- 
+## Configuración LoRa | Parámetro | Valor | 
+|------------|--------| 
+| Frecuencia | 433.775 MHz | 
+| Potencia TX | 20 dBm | 
+| Spreading Factor | SF12 | 
+| Bandwidth | 125 kHz | 
+| Coding Rate | 4/5 | 
+---
+
+## Funcionamiento General 
+1. Inicialización de periféricos.
+2. Adquisición de datos GPS y sensores.
+3. Construcción de tramas APRS.
+4. Transmisión mediante LoRa.
+5. Recepción por gateway.
+6. Publicación en APRS-IS.
+7. Visualización en APRS.fi.
+8. Retorno a modo de bajo consumo.
+
+---
+
+## Resultados Obtenidos
+Las pruebas realizadas permitieron validar:
+- Adquisición correcta de coordenadas GPS.
+- Construcción válida de paquetes APRS.
+- Transmisión exitosa mediante LoRa.
+- Recepción de paquetes por el gateway.
+- Publicación correcta en APRS.fi.
+- Integración exitosa con infraestructura APRS existente.
+
+---
+
+## Aplicaciones Potenciales
+- Monitoreo estructural de puentes.
+- Infraestructura vial.
+- Sistemas IoT en zonas remotas.
+- Mantenimiento predictivo.
+- Redes de sensores inalámbricos.
+- Supervisión de estructuras críticas.
+
+
+---
