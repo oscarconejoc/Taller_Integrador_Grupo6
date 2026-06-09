@@ -34,6 +34,25 @@ El sistema opera bajo los lineamientos del **Plan Nacional de Atribución de Fre
 * **Normativa:** Regulado por el MICITT y supervisado técnicamente por la SUTEL.
 
 ## Arquitectura del Firmware.
+
+## Diagrama de Nivel 1
+
+<p align="center">
+<img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/Nivel1.png" alt="APRS.fi" width="500">
+</p>
+
+## Diagrama de Nivel 2
+
+<p align="center">
+<img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/Nivel2.png" alt="APRS.fi" width="500">
+</p>
+
+## Diagrama de Nivel 3
+
+<p align="center">
+<img src="https://github.com/oscarconejoc/Taller_Integrador_Grupo6/blob/main/Planeamiento%20del%20proyecto/Nivel3.png" alt="APRS.fi" width="500">
+</p>
+
 ## Máquina de estados del firmware.
 
 ```mermaid
