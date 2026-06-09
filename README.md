@@ -223,14 +223,14 @@ Ejemplo: TI0TEC6-7, 9911951, -84087751, 3416, 520, 120, 92
 | Batería | 8 |
 | Regulador | 5 |
 | Otros | 5 |
-| **Total** | **49 USD** |
+| **Total** | **49** |
 
 49 dolares que pasan a 22548.82 colones con el tipo de cambio actual a 460.18
 
 ### 2. Honorarios Profesionales.
 Con base en la tarifa mínima por hora profesional establecida por el Colegio Federado de Ingenieros y de Arquitectos.
 ---
-| Descripción | Tiempo Invertido | Tarifa por Hora | Subtotal (Colones) |
+| Descripción | Tiempo Invertido | Tarifa por Hora | Subtotal |
 | :--- | :---: | :---: | :--- |
 | Desarrollo de firmware, integración de sensores y pruebas de transmisión | 40 horas | ¢37,700 | ¢1,508,000 |
 | **Total de Honorarios** | | | **¢1,508,000** |
