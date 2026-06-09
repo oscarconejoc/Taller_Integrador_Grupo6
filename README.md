@@ -424,5 +424,26 @@ Las pruebas realizadas permitieron validar:
 ### Trama APRS
 
 ```cpp
+APRSMessage msg;
+      msg.setSource(BeaconMan.getCurrent()->callsign);
+      msg.setPath(BeaconMan.getCurrent()->path);
+      msg.setDestination("APLT00");
+      String lat = create_lat_aprs_dao(gps.location.rawLat());
+      String lng = create_long_aprs_dao(gps.location.rawLng());
+      String dao = create_dao_aprs(gps.location.rawLat(), gps.location.rawLng());
+      String cuerpo = String("!") + lat + BeaconMan.getCurrent()->overlay + lng + BeaconMan.getCurrent()->symbol + String("000/000") + String("/A=000000") + BeaconMan.getCurrent()->message + " " + dao;
+      msg.getBody()->setData(cuerpo);
+      String trama = msg.encode();
+
+      show_display("<< TX >>", trama.substring(0, 21), "", "", 0);
+      logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "Enviando trama: %s", trama.substring(0, 30).c_str());
+
+      LoRa.beginPacket();
+      LoRa.write('<'); LoRa.write(0xFF); LoRa.write(0x01);
+      LoRa.write((const uint8_t *)trama.c_str(), trama.length());
+```
+
+### Smartbeaconing
+```cpp
 
 ```
