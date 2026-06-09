@@ -301,7 +301,7 @@ Las pruebas realizadas permitieron validar:
 ## Codigo Importante
 
 ### GPS
-```
+```cpp
  switch (estadoActual) {
     case GPS_CALIBRATION: {
       static bool calIniciado = false;
@@ -371,4 +371,4 @@ Las pruebas realizadas permitieron validar:
       if (!gps.location.isValid()) { estadoFallo = SENSING; estadoActual = ERROR_RETRY; return; }
       estadoActual = BUILD_PACKET;
       break; 
-```cpp
+```
