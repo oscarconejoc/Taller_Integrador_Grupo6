@@ -306,16 +306,7 @@ Las pruebas realizadas permitieron validar:
 
 ---
 
-## Aplicaciones Potenciales.
-- Monitoreo estructural de puentes.
-- Infraestructura vial.
-- Sistemas IoT en zonas remotas.
-- Mantenimiento predictivo.
-- Redes de sensores inalámbricos.
-- Supervisión de estructuras críticas.
 
-
----
 
 ## Codigo Importante
 
@@ -485,3 +476,16 @@ for (JsonVariant v : beacons) {
         }
       }
 ```
+
+---
+
+## Aplicaciones Potenciales.
+- Monitoreo estructural de puentes.
+- Infraestructura vial.
+- Sistemas IoT en zonas remotas.
+- Mantenimiento predictivo.
+- Redes de sensores inalámbricos.
+- Supervisión de estructuras críticas.
+
+
+---
