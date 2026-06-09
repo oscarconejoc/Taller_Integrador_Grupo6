@@ -445,5 +445,24 @@ APRSMessage msg;
 
 ### Smartbeaconing
 ```cpp
-
+for (JsonVariant v : beacons) {
+          BeaconConfig bc;
+          bc.callsign = v["callsign"].as<String>();
+          bc.path = v["path"].as<String>();
+          bc.message = v["message"].as<String>();
+          bc.timeout = v["timeout"] | 1;
+          bc.symbol = v["symbol"].as<String>();
+          bc.overlay = v["overlay"].as<String>();
+          bc.smart_beacon.active = v["smart_beacon"]["active"] | false;
+          bc.smart_beacon.turn_min = v["smart_beacon"]["turn_min"] | 0;
+          bc.smart_beacon.slow_rate = v["smart_beacon"]["slow_rate"] | 300;
+          bc.smart_beacon.slow_speed = v["smart_beacon"]["slow_speed"] | 10;
+          bc.smart_beacon.fast_rate = v["smart_beacon"]["fast_rate"] | 0;
+          bc.smart_beacon.fast_speed = v["smart_beacon"]["fast_speed"] | 0;
+          bc.smart_beacon.min_tx_dist = v["smart_beacon"]["min_tx_dist"] | 0;
+          bc.smart_beacon.min_bcn = v["smart_beacon"]["min_bcn"] | 0;
+          bc.enhance_precision = v["enhance_precision"] | false;
+          Config.beacons.push_back(bc);
+        }
+      }
 ```
