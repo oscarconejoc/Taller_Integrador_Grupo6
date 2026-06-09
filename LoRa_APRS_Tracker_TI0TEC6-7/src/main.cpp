@@ -33,7 +33,7 @@
 #define LORA_RST     23
 #define LORA_IRQ     26
 
-//Def variables
+//Def variables el beacon
 struct BeaconConfig {
   String callsign;
   String path;
@@ -57,9 +57,12 @@ struct BeaconConfig {
 //Configuracion del sistema
 struct SystemConfiguration {
   bool debug;
+//Es una lista donde estan los objetos tipo beacon
   std::list<BeaconConfig> beacons;
   struct { bool tx; bool alt_message; } button;
+//Parametros Internos LoRa
   struct { long frequencyRx; long frequencyTx; int power; int spreadingFactor; long signalBandwidth; int codingRate4; } lora;
+//Estructura Push to talk  
   struct { bool active; int io_pin; int start_delay; int end_delay; bool reverse; } ptt;
 };
 
@@ -75,29 +78,37 @@ TinyGPSPlus gps;
 // Gestion de perfiles (se cuenta con solo uno)
 class InlineBeaconManager {
 private:
+//Copia de beacons
   std::list<BeaconConfig> _beacons;
+//Un puntero para el beacon
   std::list<BeaconConfig>::iterator _current;
 public:
+//Carga de beacon
   void load(const std::list<BeaconConfig> &config) { _beacons = config; _current = _beacons.begin(); }
+//Iterdor del Beacon para mantenerlo
   std::list<BeaconConfig>::iterator getCurrent() const { return _current; }
+//Cambio de Beacon
   void next() { if (++_current == _beacons.end()) _current = _beacons.begin(); }
 } BeaconMan;
 
 // Display OLED
 void setup_display() {
+//Inicio de I2C
   Wire.begin(OLED_SDA, OLED_SCL);
+//Encendido de la pantalla
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3c, false, false)) {
     logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "SSD1306", "¡Fallo de asignación OLED!");
     while (true);
   }
+//Control del cursor y paramemtros de la pantalla
   display.clearDisplay();
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0, 0);
-  display.print("LORA TRACKER V1.2");
+  display.print("LORA TBEAM V1.2");
   display.display();
 }
-
+//Configuracion del texto en pantalla
 void show_display(String header, String l1 = "", String l2 = "", String l3 = "", int wait = 0) {
   display.clearDisplay();
   display.setTextColor(WHITE);
@@ -140,6 +151,7 @@ bool setup_pmu() {
 }
 
 void load_config() {
+//Valores por defecto
   Config.beacons.clear();
   Config.button.tx = false;
   Config.button.alt_message = false;
@@ -153,12 +165,12 @@ void load_config() {
   Config.ptt.start_delay = 0;
   Config.ptt.end_delay = 0;
   Config.ptt.reverse = false;
-
+//Inicio del sistema
   if (!SPIFFS.begin(true)) {
     logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "FS", "Error al montar SPIFFS.");
     return;
   }
-
+//.json a buscar
   const char *paths[] = {
     "/tracker.json",
     "/Tracker.json",
@@ -167,7 +179,7 @@ void load_config() {
     "/data/tracker.json",
     "/data/Tracker.json"
   };
-
+//busqueda del archivo valido
   File file;
   const char *openedPath = nullptr;
   for (const char *path : paths) {
@@ -180,15 +192,17 @@ void load_config() {
       file.close();
     }
   }
-
+//En caso de error
   if (!file) {
     logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "Config", "No existe tracker.json ni data.json");
     show_display("ERROR", ".JSON", "Cargar valido", "", 2000);
   } else {
+//En caso de encontrar el archivo 4096 bytes mem
     DynamicJsonDocument data(4096);
     auto err = deserializeJson(data, file);
     size_t fileSize = file.size();
     file.close();
+//En caso de error de sintaxis
     if (err) {
       String errMsg = String(err.c_str());
       if (fileSize == 0) {
@@ -197,16 +211,19 @@ void load_config() {
       logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "Config", "Error al parsear JSON (%s): %s", openedPath ? openedPath : "unknown", errMsg.c_str());
       show_display("ERROR", ".JSON invalido", errMsg, "", 3000);
     } else {
+//Extracción exitosa
       if (openedPath) {
         show_display("JSON OK", openedPath, "", "", 1000);
       }
       Config.debug = data["debug"] | false;
       Config.debug = data["debug"] | false;
       JsonArray beacons = data["beacons"].as<JsonArray>();
+//En el caso de que no hayan beacons
       if (beacons.isNull()) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "Config", "No existe campo 'beacons' en JSON.");
         show_display("WARNING", "No beacons", "...", "", 2000);
       } else {
+//Mapeo de los identificadores del .json y parametros de Smartbeacon
         for (JsonVariant v : beacons) {
           BeaconConfig bc;
           bc.callsign = v["callsign"].as<String>();
@@ -227,6 +244,7 @@ void load_config() {
           Config.beacons.push_back(bc);
         }
       }
+      //Mapeo del boton y datos de LoRa
       Config.button.tx = data["button"]["tx"] | false;
       Config.button.alt_message = data["button"]["alt_message"] | false;
       Config.lora.frequencyTx = data["lora"]["frequency_tx"] | 433775000;
@@ -245,7 +263,7 @@ void load_config() {
       Config.ptt.reverse = pttData["reverse"] | false;
     }
   }
-
+//En el caso de beacon vacio valores por error
   if (Config.beacons.empty()) {
     BeaconConfig defaultBeacon;
     defaultBeacon.callsign = "NOCALL";
