@@ -372,3 +372,53 @@ Las pruebas realizadas permitieron validar:
       estadoActual = BUILD_PACKET;
       break; 
 ```
+
+###Transmisión LoRa
+
+```cpp
+ case TX_DATA: {
+      pmu.disableALDO3(); // Apagar GPS para ahorrar energía (Corregido)
+      
+      // Verificar que LoRa esté inicializado
+      if (!lora_initialized) {
+        logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "TX", "LoRa no inicializado, reintentando...");
+        show_display("LORA", "Redo...", "", "", 1000);
+        setup_lora();
+        if (!lora_initialized) {
+          estadoFallo = TX_DATA; 
+          estadoActual = ERROR_RETRY;
+          break;
+        }
+      }
+      
+      // Re-encapsulado rápido para transmisión física
+      APRSMessage msg;
+      msg.setSource(BeaconMan.getCurrent()->callsign);
+      msg.setPath(BeaconMan.getCurrent()->path);
+      msg.setDestination("APLT00");
+      String lat = create_lat_aprs_dao(gps.location.rawLat());
+      String lng = create_long_aprs_dao(gps.location.rawLng());
+      String dao = create_dao_aprs(gps.location.rawLat(), gps.location.rawLng());
+      String cuerpo = String("!") + lat + BeaconMan.getCurrent()->overlay + lng + BeaconMan.getCurrent()->symbol + String("000/000") + String("/A=000000") + BeaconMan.getCurrent()->message + " " + dao;
+      msg.getBody()->setData(cuerpo);
+      String trama = msg.encode();
+
+      show_display("<< TX >>", trama.substring(0, 21), "", "", 0);
+      logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "Enviando trama: %s", trama.substring(0, 30).c_str());
+
+      LoRa.beginPacket();
+      LoRa.write('<'); LoRa.write(0xFF); LoRa.write(0x01);
+      LoRa.write((const uint8_t *)trama.c_str(), trama.length());
+      
+      if (LoRa.endPacket()) {
+        logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "¡Transmisión exitosa!");
+        show_display("TX", "Exitoso", "", "", 2000);
+        estadoActual = SLEEP;
+      } else {
+        logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "TX", "Fallo en transmisión");
+        estadoFallo = TX_DATA; 
+        estadoActual = ERROR_RETRY;
+      }
+      break;
+    }
+```
