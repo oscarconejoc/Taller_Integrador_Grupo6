@@ -312,87 +312,110 @@ Las pruebas realizadas permitieron validar:
 
 ### GPS
 ```cpp
- switch (estadoActual) {
+switch (estadoActual) {
     case GPS_CALIBRATION: {
       static bool calIniciado = false;
 
+      // Configuración inicial al entrar al estado
       if (!calIniciado) {
         calIniciado = true; 
-        calTiempoTotal = millis(); 
-        calTimerEspera = millis(); 
-        calLecturas = 0;
+        calTiempoTotal = millis();  // Tiempo de inicio para el timeout
+        calTimerEspera = millis();  
+        calLecturas = 0;            // Resetea contador de lecturas
         show_display("GPS", "Reading...", "Lecturas: 0/4", "");
-      }      
-      // Timeout: si no tienes fix en 15 minutos, salta a SLEEP
-
+      }     
+      
+      // Timeout: si no consigue fix en 15 minutos, va a SLEEP
       if (millis() - calTiempoTotal > 900000) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "GPS", "Timeout...");
-        estadoActual = SLEEP; 
-        calIniciado = false; 
+        estadoActual = SLEEP;       
+        calIniciado = false;        
         return;
       }
 
+      // Sub-estado: Esperando datos válidos del GPS
       if (calEsperandoFix) {
-
         if (gps.location.isValid() && gps.location.isUpdated()) {
-          calLecturas++;
+          calLecturas++; // Nueva lectura válida
           show_display("GPS", String("Lectura ") + String(calLecturas) + "/4", String(gps.location.lat(),4), "", 2000);
 
+          // Si ya tiene las 4 lecturas, termina la calibración
           if (calLecturas >= 4) {
             logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "GPS", "Calibración completada");
-            estadoActual = SLEEP; 
-            calIniciado = false; 
+            estadoActual = SLEEP;   
+            calIniciado = false;    
             return;
           }
-          calEsperandoFix = false; 
-          calEsperandoPausa = true; 
-          calTimerEspera = millis();
+          
+          // Cambia a modo espera (pausa entre lecturas)
+          calEsperandoFix = false;  
+          calEsperandoPausa = true;  
+          calTimerEspera = millis(); 
         }
         return;
       }
 
+      // Sub-estado: Esperando que pase el tiempo de pausa
       if (calEsperandoPausa) {
-        uint32_t intervalo = calIntervalos[calLecturas - 1];
+        uint32_t intervalo = calIntervalos[calLecturas - 1]; // Tiempo de pausa actual
         if (millis() - calTimerEspera >= intervalo) {
-          calEsperandoPausa = false; 
-          calEsperandoFix = true; 
-          calTimerEspera = millis();
+          calEsperandoPausa = false; // Fin de la pausa
+          calEsperandoFix = true;    // Vuelve a buscar fix
+          calTimerEspera = millis(); 
         }
       }
       break;
     }
 
+    // === ENCENDIDO DEL GPS ===
     case GPS_ON:
-      pmu.enableALDO3(); // Encender GPS (Corregido)
+      pmu.enableALDO3(); // Enciende el hardware del GPS
+      
+      // Inicia temporizador en la primera vuelta
       if (gpsOnStart == 0) {
         gpsOnStart = millis();
         show_display("GPS", "Fix...", "", "", 1000);
       }
+      
+      // Si hay fix válido, pasa a medir sensores
       if (gps.location.isValid() && gps.location.isUpdated()) {
+        gpsOnStart = 0;             
+        estadoActual = SENSING;     
+      } 
+      // Si supera el tiempo límite sin señal, va a reintento de error
+      else if (millis() - gpsOnStart > TIMEOUT_GPS) {
         gpsOnStart = 0;
-        estadoActual = SENSING;
-      } else if (millis() - gpsOnStart > TIMEOUT_GPS) {
-        gpsOnStart = 0;
-        estadoFallo = GPS_ON; estadoActual = ERROR_RETRY;
+        estadoFallo = GPS_ON;       
+        estadoActual = ERROR_RETRY; 
       }
       break;
 
+    // === LECTURA DE SENSORES ===
     case SENSING:
-      if (!gps.location.isValid()) { estadoFallo = SENSING; estadoActual = ERROR_RETRY; return; }
+      // Si el GPS pierde la señal, va a error
+      if (!gps.location.isValid()) { 
+        estadoFallo = SENSING; 
+        estadoActual = ERROR_RETRY; 
+        return; 
+      }
+      
+      // Si todo está bien, pasa a armar el paquete de datos
       estadoActual = BUILD_PACKET;
-      break; 
+      break;
 ```
 
-### Transmisión LoRa
+### Transmisión LoRa y trama APRS
 ```cpp
- case TX_DATA: {
-      pmu.disableALDO3(); // Apagar GPS para ahorrar energía (Corregido)
+    case TX_DATA: {
+      pmu.disableALDO3(); // Apaga el GPS para ahorrar energía
       
-      // Verificar que LoRa esté inicializado
+      // Control de inicialización de LoRa
       if (!lora_initialized) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "TX", "LoRa no inicializado, reintentando...");
         show_display("LORA", "Redo...", "", "", 1000);
-        setup_lora();
+        setup_lora(); // Intenta inicializar LoRa de nuevo
+        
+        // Si sigue fallando, va a estado de error
         if (!lora_initialized) {
           estadoFallo = TX_DATA; 
           estadoActual = ERROR_RETRY;
@@ -400,81 +423,75 @@ Las pruebas realizadas permitieron validar:
         }
       }
       
-      // Re-encapsulado rápido para transmisión física
+      //Construcción del mensaje
       APRSMessage msg;
       msg.setSource(BeaconMan.getCurrent()->callsign);
       msg.setPath(BeaconMan.getCurrent()->path);
       msg.setDestination("APLT00");
+      
+      // Formatea coordenadas para el protocolo APRS
       String lat = create_lat_aprs_dao(gps.location.rawLat());
       String lng = create_long_aprs_dao(gps.location.rawLng());
       String dao = create_dao_aprs(gps.location.rawLat(), gps.location.rawLng());
+      
+      // Une todos los campos en el cuerpo del mensaje
       String cuerpo = String("!") + lat + BeaconMan.getCurrent()->overlay + lng + BeaconMan.getCurrent()->symbol + String("000/000") + String("/A=000000") + BeaconMan.getCurrent()->message + " " + dao;
       msg.getBody()->setData(cuerpo);
-      String trama = msg.encode();
+      String trama = msg.encode(); // Genera el paquete final
 
+      // Muestra en pantalla y log el inicio del envío
       show_display("<< TX >>", trama.substring(0, 21), "", "", 0);
       logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "Enviando trama: %s", trama.substring(0, 30).c_str());
 
+      //Envío físico por LoRa
       LoRa.beginPacket();
-      LoRa.write('<'); LoRa.write(0xFF); LoRa.write(0x01);
-      LoRa.write((const uint8_t *)trama.c_str(), trama.length());
+      LoRa.write('<'); LoRa.write(0xFF); LoRa.write(0x01); // Cabecera del paquete
+      LoRa.write((const uint8_t *)trama.c_str(), trama.length()); // Datos de la trama
       
+      // Verifica si la transmisión fue correcta
       if (LoRa.endPacket()) {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "¡Transmisión exitosa!");
         show_display("TX", "Exitoso", "", "", 2000);
-        estadoActual = SLEEP;
+        estadoActual = SLEEP; // Éxito: pasa a modo dormir
       } else {
         logger.log(logging::LoggerLevel::LOGGER_LEVEL_ERROR, "TX", "Fallo en transmisión");
         estadoFallo = TX_DATA; 
-        estadoActual = ERROR_RETRY;
+        estadoActual = ERROR_RETRY; // Error: va a reintento
       }
       break;
     }
 ```
-### Trama APRS
 
-```cpp
-APRSMessage msg;
-      msg.setSource(BeaconMan.getCurrent()->callsign);
-      msg.setPath(BeaconMan.getCurrent()->path);
-      msg.setDestination("APLT00");
-      String lat = create_lat_aprs_dao(gps.location.rawLat());
-      String lng = create_long_aprs_dao(gps.location.rawLng());
-      String dao = create_dao_aprs(gps.location.rawLat(), gps.location.rawLng());
-      String cuerpo = String("!") + lat + BeaconMan.getCurrent()->overlay + lng + BeaconMan.getCurrent()->symbol + String("000/000") + String("/A=000000") + BeaconMan.getCurrent()->message + " " + dao;
-      msg.getBody()->setData(cuerpo);
-      String trama = msg.encode();
-
-      show_display("<< TX >>", trama.substring(0, 21), "", "", 0);
-      logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "TX", "Enviando trama: %s", trama.substring(0, 30).c_str());
-
-      LoRa.beginPacket();
-      LoRa.write('<'); LoRa.write(0xFF); LoRa.write(0x01);
-      LoRa.write((const uint8_t *)trama.c_str(), trama.length());
-```
 
 ### Smartbeaconing
 ```cpp
 for (JsonVariant v : beacons) {
-          BeaconConfig bc;
-          bc.callsign = v["callsign"].as<String>();
-          bc.path = v["path"].as<String>();
-          bc.message = v["message"].as<String>();
-          bc.timeout = v["timeout"] | 1;
-          bc.symbol = v["symbol"].as<String>();
-          bc.overlay = v["overlay"].as<String>();
-          bc.smart_beacon.active = v["smart_beacon"]["active"] | false;
-          bc.smart_beacon.turn_min = v["smart_beacon"]["turn_min"] | 0;
-          bc.smart_beacon.slow_rate = v["smart_beacon"]["slow_rate"] | 300;
-          bc.smart_beacon.slow_speed = v["smart_beacon"]["slow_speed"] | 10;
-          bc.smart_beacon.fast_rate = v["smart_beacon"]["fast_rate"] | 0;
-          bc.smart_beacon.fast_speed = v["smart_beacon"]["fast_speed"] | 0;
-          bc.smart_beacon.min_tx_dist = v["smart_beacon"]["min_tx_dist"] | 0;
-          bc.smart_beacon.min_bcn = v["smart_beacon"]["min_bcn"] | 0;
-          bc.enhance_precision = v["enhance_precision"] | false;
-          Config.beacons.push_back(bc);
-        }
-      }
+  BeaconConfig bc;
+
+  // Datos básicos de la estación APRS
+  bc.callsign = v["callsign"].as<String>();
+  bc.path     = v["path"].as<String>();
+  bc.message  = v["message"].as<String>();
+  bc.timeout  = v["timeout"] | 1; // Valor por defecto: 1
+  bc.symbol   = v["symbol"].as<String>();
+  bc.overlay  = v["overlay"].as<String>();
+
+  // Configuración del algoritmo SmartBeaconing
+  bc.smart_beacon.active       = v["smart_beacon"]["active"] | false;
+  bc.smart_beacon.turn_min     = v["smart_beacon"]["turn_min"] | 0;
+  bc.smart_beacon.slow_rate    = v["smart_beacon"]["slow_rate"] | 300;
+  bc.smart_beacon.slow_speed   = v["smart_beacon"]["slow_speed"] | 10;
+  bc.smart_beacon.fast_rate    = v["smart_beacon"]["fast_rate"] | 0;
+  bc.smart_beacon.fast_speed   = v["smart_beacon"]["fast_speed"] | 0;
+  bc.smart_beacon.min_tx_dist  = v["smart_beacon"]["min_tx_dist"] | 0;
+  bc.smart_beacon.min_bcn      = v["smart_beacon"]["min_bcn"] | 0;
+
+  // Precisión mejorada
+  bc.enhance_precision         = v["enhance_precision"] | true;
+
+  // Guarda la baliza configurada en el vector global
+  Config.beacons.push_back(bc);
+}
 ```
 
 ---
