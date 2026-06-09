@@ -297,3 +297,142 @@ Las pruebas realizadas permitieron validar:
 
 
 ---
+
+## Codigo Importante
+
+### GPS
+```
+ switch (estadoActual) {
+
+    case GPS_CALIBRATION: {
+
+      static bool calIniciado = false;
+
+      if (!calIniciado) {
+
+        calIniciado = true; 
+
+        calTiempoTotal = millis(); 
+
+        calTimerEspera = millis(); 
+
+        calLecturas = 0;
+
+        show_display("GPS", "Reading...", "Lecturas: 0/4", "");
+
+      }
+
+      
+
+      // Timeout: si no tienes fix en 15 minutos, salta a SLEEP
+
+      if (millis() - calTiempoTotal > 900000) {
+
+        logger.log(logging::LoggerLevel::LOGGER_LEVEL_WARN, "GPS", "Timeout...");
+
+        estadoActual = SLEEP; 
+
+        calIniciado = false; 
+
+        return;
+
+      }
+
+      
+
+      if (calEsperandoFix) {
+
+        if (gps.location.isValid() && gps.location.isUpdated()) {
+
+          calLecturas++;
+
+          show_display("GPS", String("Lectura ") + String(calLecturas) + "/4", String(gps.location.lat(),4), "", 2000);
+
+          if (calLecturas >= 4) {
+
+            logger.log(logging::LoggerLevel::LOGGER_LEVEL_INFO, "GPS", "Calibración completada");
+
+            estadoActual = SLEEP; 
+
+            calIniciado = false; 
+
+            return;
+
+          }
+
+          calEsperandoFix = false; 
+
+          calEsperandoPausa = true; 
+
+          calTimerEspera = millis();
+
+        }
+
+        return;
+
+      }
+
+      
+
+      if (calEsperandoPausa) {
+
+        uint32_t intervalo = calIntervalos[calLecturas - 1];
+
+        if (millis() - calTimerEspera >= intervalo) {
+
+          calEsperandoPausa = false; 
+
+          calEsperandoFix = true; 
+
+          calTimerEspera = millis();
+
+        }
+
+      }
+
+      break;
+
+    }
+
+
+
+    case GPS_ON:
+
+      pmu.enableALDO3(); // Encender GPS (Corregido)
+
+      if (gpsOnStart == 0) {
+
+        gpsOnStart = millis();
+
+        show_display("GPS", "Fix...", "", "", 1000);
+
+      }
+
+      if (gps.location.isValid() && gps.location.isUpdated()) {
+
+        gpsOnStart = 0;
+
+        estadoActual = SENSING;
+
+      } else if (millis() - gpsOnStart > TIMEOUT_GPS) {
+
+        gpsOnStart = 0;
+
+        estadoFallo = GPS_ON; estadoActual = ERROR_RETRY;
+
+      }
+
+      break;
+
+
+
+    case SENSING:
+
+      if (!gps.location.isValid()) { estadoFallo = SENSING; estadoActual = ERROR_RETRY; return; }
+
+      estadoActual = BUILD_PACKET;
+
+      break; 
+
+
+```
