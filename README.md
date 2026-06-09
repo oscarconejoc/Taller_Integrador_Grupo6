@@ -373,8 +373,7 @@ Las pruebas realizadas permitieron validar:
       break; 
 ```
 
-###Transmisión LoRa
-
+### Transmisión LoRa
 ```cpp
  case TX_DATA: {
       pmu.disableALDO3(); // Apagar GPS para ahorrar energía (Corregido)
@@ -421,4 +420,9 @@ Las pruebas realizadas permitieron validar:
       }
       break;
     }
+```
+### Trama APRS
+
+```cpp
+
 ```
